@@ -26,13 +26,23 @@ TableMaster is a Flask-based restaurant management and point-of-sale application
 ## Project structure
 
 ```text
-app.py                 Flask application and routes
+app.py                 Application bootstrap and printing integration
+tablemaster/database.py SQLite connections and initialization
+tablemaster/licensing.py Installation license validation
+tablemaster/routes/     Routes grouped by product domain
+tablemaster/services/   Spreadsheet and business services
 templates/             Jinja pages, settings, partials, and modals
-static/                CSS, JavaScript, icons, manifest, and service worker
+static/css/components/  Shared interface components
+static/css/pages/       Page-specific presentation
+static/js/core/         Shared browser behavior
+static/js/pages/        Page-specific interactions
 schema.sql             Main SQLite schema
 audit_schema.sql       Audit database schema
 uploads/template.xlsx  Product import template
+tests/                  Architecture and integrity checks
 ```
+
+The route modules use explicit registration functions, keeping every original URL and Flask endpoint name stable while separating authentication, tables, orders, billing, catalogue, administration, and settings concerns.
 
 ## Local setup
 
@@ -43,6 +53,10 @@ uploads/template.xlsx  Product import template
 5. Start the application with `python app.py` and open `http://localhost:5000`.
 
 The application creates its SQLite databases locally from the included schemas. Database files, encryption keys, license files, backups, and customer uploads are intentionally excluded from this public repository.
+
+## Validation
+
+Run `python -m unittest discover -s tests -v` to validate Python syntax, database initialization, template parsing, static-asset references, route coverage, and the absence of sensitive runtime files.
 
 ## Portfolio note
 

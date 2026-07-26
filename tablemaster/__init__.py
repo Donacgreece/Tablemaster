@@ -1,0 +1,1 @@
+"""TableMaster application package."""
