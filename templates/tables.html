@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Διαχείριση Τραπεζιών - TableMaster{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4 text-center">Διαχείριση Τραπεζιών</h1>
+    
+    <div class="d-flex justify-content-between mb-4">
+        {% if session['user_role'] == 'admin' %}
+            <button class="btn btn-primary" data-toggle="modal" data-target="#addTableModal">
+                <i class="fas fa-plus"></i> Προσθήκη Τραπεζιού
+            </button>
+        {% endif %}
+    </div>
+
+    {% set spaces = tables | map(attribute='space') | list | unique %}
+    {% set space_list = spaces | list %}
+    {% if space_list | length > 1 %}
+    <ul class="nav nav-tabs" id="spaceTabs" role="tablist">
+        {% for space in space_list %}
+            <li class="nav-item">
+                <a class="nav-link {% if loop.first %}active{% endif %}" id="tab-{{ loop.index }}" data-toggle="tab" href="#content-{{ loop.index }}" role="tab" aria-controls="content-{{ loop.index }}" aria-selected="true">
+                    {{ space }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="tab-content" id="spaceTabsContent">
+        {% for space in space_list %}
+            <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="content-{{ loop.index }}" role="tabpanel" aria-labelledby="tab-{{ loop.index }}">
+                <div class="row">
+                    {% for table in tables if table.space == space %}
+                    <div class="col-md-4 col-sm-6 mb-4">
+                        <a href="{{ url_for('manage_table', table_id=table.id) }}" class="text-decoration-none">
+                            <div class="card shadow-sm clickable-card">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Τραπέζι {{ table.table_number }}</h5>
+                                    <p class="card-text">Χωρητικότητα: {{ table.capacity }} άτομα</p>
+                                    <p class="card-text">
+                                        {% if table.status == 'free' %}
+                                            <span class="badge badge-success">Ελεύθερο</span>
+                                        {% elif table.status == 'occupied' %}
+                                            <span class="badge badge-danger">Κατειλημμένο</span>
+                                        {% elif table.status == 'reserved' %}
+                                            <span class="badge badge-warning">Κρατημένο</span>
+                                        {% else %}
+                                            <span class="badge badge-secondary">Άγνωστο</span>
+                                        {% endif %}
+                                    </p>                    
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="row">
+        {% for table in tables %}
+        <div class="col-md-4 col-sm-6 mb-4">
+            <a href="{{ url_for('manage_table', table_id=table.id) }}" class="text-decoration-none">
+                <div class="card shadow-sm clickable-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Τραπέζι {{ table.table_number }}</h5>
+                        <p class="card-text">Χωρητικότητα: {{ table.capacity }} άτομα</p>
+                        <p class="card-text">
+                            {% if table.status == 'free' %}
+                                <span class="badge badge-success">Ελεύθερο</span>
+                            {% elif table.status == 'occupied' %}
+                                <span class="badge badge-danger">Κατειλημμένο</span>
+                            {% elif table.status == 'reserved' %}
+                                <span class="badge badge-warning">Κρατημένο</span>
+                            {% else %}
+                                <span class="badge badge-secondary">Άγνωστο</span>
+                            {% endif %}
+                        </p>                    
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+{% include 'modals/add_table_modal.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tables.css') }}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/tables.js') }}"></script>
+{% endblock %}
+
+{% endblock %}

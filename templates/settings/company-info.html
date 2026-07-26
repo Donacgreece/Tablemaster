@@ -1,0 +1,30 @@
+<div class="tab-pane fade {% if request.args.get('tab') == 'company-info' %}show active{% endif %}" id="company-info">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">Στοιχεία Εταιρείας</div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('update_company_info') }}">
+                <div class="form-group">
+                    <label for="company_name" class="font-weight-bold">Όνομα Εταιρείας</label>
+                    <input type="text" class="form-control" id="company_name" name="company_name" value="{{ company_info.company_name if company_info else '' }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="company_address" class="font-weight-bold">Διεύθυνση</label>
+                    <input type="text" class="form-control" id="company_address" name="company_address" value="{{ company_info.company_address if company_info else '' }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="company_tax_id" class="font-weight-bold">Α.Φ.Μ.</label>
+                    <input type="text" class="form-control" id="company_tax_id" name="company_tax_id" value="{{ company_info.company_tax_id if company_info else '' }}" required>
+                </div>                
+                <div class="form-group">
+                    <label for="company_tax_office" class="font-weight-bold">Δ.Ο.Υ.</label>
+                    <input type="text" class="form-control" id="company_tax_office" name="company_tax_office" value="{{ company_info.company_tax_office if company_info else '' }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="company_phone" class="font-weight-bold">Τηλέφωνο</label>
+                    <input type="text" class="form-control" id="company_phone" name="company_phone" value="{{ company_info.company_phone if company_info else '' }}" required>
+                </div>
+                <button type="submit" class="btn btn-info btn-block">Αποθήκευση</button>
+            </form>
+        </div>
+    </div>
+</div>

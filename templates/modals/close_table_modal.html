@@ -1,0 +1,54 @@
+<div class="modal fade" id="closeTableModal" tabindex="-1" role="dialog" aria-labelledby="closeTableModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="closeTableModalLabel">Κλείσιμο Τραπεζιού</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="{{ url_for('close_table', table_id=order.table_id) }}">
+                <div class="modal-body">
+                    Όλα τα προϊόντα έχουν πληρωθεί. Θέλετε να κλείσετε το τραπέζι;
+                    <div class="form-group mt-3 text-center">
+                        <input type="hidden" id="payment_method" name="payment_method">
+                        <button type="button" class="btn btn-outline-primary payment-option" data-method="cash">
+                            <i class="fas fa-money-bill-wave fa-2x"></i>
+                            <br>
+                            Μετρητά
+                        </button>
+                        <button type="button" class="btn btn-outline-success payment-option" data-method="card">
+                            <i class="fas fa-credit-card fa-2x"></i>
+                            <br>
+                            Κάρτα
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ακύρωση</button>
+                    <button type="submit" class="btn btn-success" id="submitBtn" disabled>Ναι, κλείσιμο τραπεζιού</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const paymentOptions = document.querySelectorAll(".payment-option");
+    const paymentMethodInput = document.getElementById("payment_method");
+    const submitBtn = document.getElementById("submitBtn");
+
+    paymentOptions.forEach(option => {
+        option.addEventListener("click", function() {
+            paymentOptions.forEach(btn => btn.classList.remove("active"));
+            this.classList.add("active");
+            paymentMethodInput.value = this.getAttribute("data-method");
+            submitBtn.disabled = false;  // Ενεργοποιούμε το κουμπί υποβολής όταν επιλεγεί μέθοδος πληρωμής
+        });
+    });
+
+    // Απενεργοποιούμε το κουμπί υποβολής αν δεν έχει επιλεχθεί μέθοδος πληρωμής
+    submitBtn.disabled = true;
+});
+</script>

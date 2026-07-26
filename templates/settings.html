@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Ρυθμίσεις και Διαχείριση Προϊόντων - TableMaster{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 mb-3">
+            <div class="list-group">
+                <a href="?tab=general" class="list-group-item list-group-item-action {% if request.args.get('tab') == None or request.args.get('tab') == 'general' %}active{% endif %}">
+                    <i class="fas fa-cogs mr-2"></i>Γενικές
+                </a>
+                <a href="?tab=company-info" class="list-group-item list-group-item-action {% if request.args.get('tab') == 'company-info' %}active{% endif %}">
+                    <i class="fas fa-building mr-2"></i>Εταιρεία
+                </a>    
+                <a href="?tab=user-management" class="list-group-item list-group-item-action {% if request.args.get('tab') == 'user-management' %}active{% endif %}">
+                    <i class="fas fa-user-cog mr-2"></i>Χρήστες
+                </a>
+                <a href="?tab=printer-management" class="list-group-item list-group-item-action {% if request.args.get('tab') == 'printer-management' %}active{% endif %}">
+                    <i class="fas fa-print mr-2"></i>Εκτυπωτές
+                </a>
+                <a href="?tab=invoice-management" class="list-group-item list-group-item-action {% if request.args.get('tab') == 'invoice-management' %}active{% endif %}">
+                    <i class="fas fa-receipt mr-2"></i>Παραστατικά
+                </a>     
+                <a href="?tab=product-management" class="list-group-item list-group-item-action {% if request.args.get('tab') == 'product-management' %}active{% endif %}">
+                    <i class="fas fa-boxes mr-2"></i>Προϊόντα
+                </a>
+                <a href="?tab=audit-logs" class="list-group-item list-group-item-action {% if request.args.get('tab') == 'audit-logs' %}active{% endif %}">
+                    <i class="fas fa-search mr-2"></i>Διαγραφές
+                </a>   
+                <a href="?tab=pending-prints" class="list-group-item list-group-item-action {% if request.args.get('tab') == 'pending-prints' %}active{% endif %}">
+                    <i class="fas fa-tasks mr-2"></i>Ουρά Εκκρεμών
+                </a>
+                <a href="?tab=backup-restore" class="list-group-item list-group-item-action {% if request.args.get('tab') == 'backup-restore' %}active{% endif %}">
+                    <i class="fas fa-database mr-2"></i>Αντ. Ασφαλείας
+                </a>
+                <a href="?tab=license-management" class="list-group-item list-group-item-action {% if request.args.get('tab') == 'license-management' %}active{% endif %}">
+                    <i class="fas fa-key mr-2"></i>Άδεια Χρήσης
+                </a>
+            </div>
+        </nav>
+
+        <!-- Content -->
+        <div class="col-md-9">
+            <div class="tab-content">
+                {% include 'settings/general.html' %}
+                {% include 'settings/user_management.html' %}
+                {% include 'modals/add_user.html' %}
+                {% include 'settings/product_management.html' %}
+                {% include 'modals/add_category.html' %}
+                {% include 'modals/add_product.html' %}
+                {% include 'settings/printer_management.html' %}
+                {% include 'modals/add_printer.html' %}
+                {% include 'settings/company-info.html' %}
+                {% include 'settings/audit_logs.html' %}
+                {% include 'settings/invoice_management.html' %}
+                {% include 'settings/pending_prints.html' %}
+                {% include 'settings/license_management.html' %}
+                {% include 'settings/backup_restore.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals for users -->
+{% for user in users %}
+    {% include 'modals/edit_user.html' %}
+    {% include 'modals/delete_user.html' %}
+{% endfor %}
+
+<!-- Modals for categories and products -->
+{% for category in categories %}
+    {% include 'modals/edit_category.html' %}
+    {% include 'modals/delete_category.html' %}
+    {% for product in category.products %}
+        {% include 'modals/edit_product.html' %}
+        {% include 'modals/delete_product.html' %}
+    {% endfor %}
+{% endfor %}
+
+<!-- Modals for printers -->
+{% for printer in printers %}
+    {% include 'modals/edit_printer.html' %}
+    {% include 'modals/delete_printer.html' %}
+{% endfor %}
+
+{% endblock %}

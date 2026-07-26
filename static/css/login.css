@@ -1,0 +1,39 @@
+body {
+    background: linear-gradient(120deg, #f1f1f1, #e2e2e2);
+}
+
+.card {
+    border-radius: 15px;
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0;
+    font-size: 1.25rem;
+}
+
+.input-group-text {
+    border-radius: 0 15px 15px 0;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border: none;
+    border-radius: 25px;
+}
+
+.btn-info:hover {
+    background-color: #138496;
+}
+
+.form-control {
+    border-radius: 15px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin-top: 10vh;
+    }
+    .btn {
+        font-size: 1rem;
+    }
+}

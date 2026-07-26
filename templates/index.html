@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}TableMaster - Απλοποιούμε την επιτυχία σας{% endblock %}
+
+{% block content %}
+<!-- Προειδοποιητικό μήνυμα -->
+{% if session.get('show_warning', False) %}
+<div class="persistent-warning alert-warning fade show" role="alert" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; width: 80%; max-width: 600px;">
+    <strong>Προειδοποίηση:</strong> Αυτό το λογισμικό προορίζεται μόνο για εσωτερική διαχείριση παραγγελιών. 
+    Ο Χρήστης είναι αποκλειστικά υπεύθυνος για την έκδοση φορολογικών παραστατικών μέσω εγκεκριμένης ταμειακής μηχανής ή παρόχου myDATA.
+    <div class="text-center mt-3">
+        <button type="button" class="btn btn-primary btn-sm" onclick="dismissWarning()">Αποδέχομαι</button>
+    </div>
+</div>
+
+<script>
+function dismissWarning() {
+    fetch('/dismiss_warning', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Warning dismissed successfully');
+            // Κλείσε το alert
+            document.querySelector('.persistent-warning').remove();
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script>
+{% endif %}
+
+<div class="hero-section text-center text-white py-5">
+    <div class="container">
+        <h1 class="display-4 font-weight-bold mb-4">Καλώς Ήρθατε στο TableMaster</h1>
+        <p class="lead mb-4">Η παραγγελιοληψία δεν ήταν ποτέ τόσο εύκολη!</p>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row text-center justify-content-center">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <a href="{{ url_for('tables') }}" class="card-link">
+                <div class="ipad-card">
+                    <div class="card-body">
+                        <i class="fas fa-th-large fa-4x" style="color:#f7b731;"></i>
+                        <h5>Τραπέζια</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <a href="{{ url_for('orders') }}" class="card-link">
+                <div class="ipad-card">
+                    <div class="card-body">
+                        <i class="fas fa-receipt fa-4x" style="color:#4ecdc4;"></i>
+                        <h5>Παραγγελίες</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <a href="{{ url_for('bills') }}" class="card-link">
+                <div class="ipad-card">
+                    <div class="card-body">
+                        <i class="fas fa-file-invoice-dollar fa-4x" style="color:#ff6b6b;"></i>
+                        <h5>Λογαριασμοί</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% if session['user_role'] == 'admin' %}
+        <div class="col-lg-3 col-md-6 mb-4 settings-card">
+            <a href="{{ url_for('settings') }}" class="card-link">
+                <div class="ipad-card">
+                    <div class="card-body">
+                        <i class="fas fa-cog fa-4x" style="color:#007aff;"></i>
+                        <h5>Ρυθμίσεις</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endif %}        
+    </div>
+</div>
+
+<div class="features-section py-5 d-none d-xl-block">
+    <div class="container text-center">
+        <h2 class="font-weight-bold mb-4">Γιατί να Επιλέξετε το TableMaster;</h2>
+        <p class="lead mb-5">Εξασφαλίζουμε την επιτυχία σας με τεχνολογία που αυξάνει την αποδοτικότητα και βελτιώνει την εμπειρία.</p>
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="feature-card">
+                    <i class="fas fa-tachometer-alt fa-3x text-primary mb-3" title="Υψηλή Απόδοση"></i>
+                    <h5 class="font-weight-bold">Υψηλή Απόδοση</h5>
+                    <p>Εργαστείτε γρήγορα και αποδοτικά, χωρίς καθυστερήσεις και προβλήματα.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="feature-card">
+                    <i class="fas fa-user-friends fa-3x text-success mb-3" title="Ευκολία Χρήσης"></i>
+                    <h5 class="font-weight-bold">Ευκολία Χρήσης</h5>
+                    <p>Απλό και κατανοητό περιβάλλον χρήστη, ιδανικό για κάθε επίπεδο εμπειρίας.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="feature-card">
+                    <i class="fas fa-user-shield fa-3x text-danger mb-3" title="Διαχείριση Χρηστών και Προσωπικού"></i>
+                    <h5 class="font-weight-bold">Διαχείριση Χρηστών</h5>
+                    <p>Διαχειριστείτε τους χρήστες και το προσωπικό σας με εύκολη διαχείριση δικαιωμάτων και πρόσβασης.</p>
+                </div>                
+            </div>            
+        </div>
+    </div>
+</div>
+
+<style>
+    .persistent-warning {
+        border: 2px solid #ffca2c;
+        background-color: #fff3cd;
+        color: #664d03;
+        font-size: 1.1rem;
+        padding: 1rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .persistent-warning .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+    }
+    .persistent-warning .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+</style>
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+{% endblock %}

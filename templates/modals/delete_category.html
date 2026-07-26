@@ -1,0 +1,21 @@
+<div class="modal fade" id="deleteCategoryModal{{ category.id }}" tabindex="-1" aria-labelledby="deleteCategoryModalLabel{{ category.id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteCategoryModalLabel{{ category.id }}">Επιβεβαίωση Διαγραφής</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Είστε σίγουροι ότι θέλετε να διαγράψετε την κατηγορία {{ category.name }}; Όλα τα προϊόντα της θα διαγραφούν.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ακύρωση</button>
+                <form method="POST" action="{{ url_for('delete_category', category_id=category.id) }}?tab=product-management" class="d-inline">
+                    <button type="submit" class="btn btn-danger">Διαγραφή</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="tab-pane fade {% if request.args.get('tab') == 'pending-prints' %}show active{% endif %}" id="pending-prints">
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            Διαχείριση Εκκρεμών Εκτυπώσεων
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Εκτυπωτής</th>
+                            <th>Είδος</th>
+                            <th>Ημερομηνία</th>
+                            <th>Ενέργειες</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for print in pending_prints %}
+                        <tr>
+                            <td>{{ print.id }}</td>
+                            <td>{{ print.printer_name }}</td>
+                            <td>{{ 'Δελτίο Παραγγελίας' if print.is_receipt else 'Παραγγελία' }}</td>
+                            <td>{{ print.timestamp }}</td>
+                            <td class="text-center">
+                                <form action="{{ url_for('cancel_print', print_id=print.id) }}" method="post" style="display:inline-block;">
+                                    <button type="submit" class="btn btn-danger btn-sm" title="Ακύρωση">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

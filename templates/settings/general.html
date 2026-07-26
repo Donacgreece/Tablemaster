@@ -1,0 +1,32 @@
+<div class="tab-pane fade {% if request.args.get('tab') == None or request.args.get('tab') == 'general' %}show active{% endif %}" id="general">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">Γενικές Ρυθμίσεις</div>
+        <div class="card-body">
+            <form method="POST" action="/save_settings">
+                <div class="form-group">
+                    <label for="language" class="font-weight-bold">Γλώσσα</label>
+                    <select class="form-control" id="language" name="language">
+                        <option value="el">Ελληνικά</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="currency" class="font-weight-bold">Νόμισμα</label>
+                    <select class="form-control" id="currency" name="currency">
+                        <option value="€">Ευρώ (€)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="theme" class="font-weight-bold">Θέμα</label>
+                    <select class="form-control" id="theme" name="theme">
+                        <option value="light">Φωτεινό</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="session_timeout" class="font-weight-bold">Χρόνος Αδράνειας πριν το Logout (σε λεπτά)</label>
+                    <input type="number" class="form-control" id="session_timeout" name="session_timeout" min="1" value="{{ session_timeout | default(10) }}" required>
+                </div>
+                <button type="submit" class="btn btn-info btn-block">Αποθήκευση</button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="addCategoryModalLabel">Προσθήκη Κατηγορίας</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="{{ url_for('add_category') }}?tab=product-management">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="category_name">Όνομα Κατηγορίας</label>
+                        <input type="text" class="form-control" id="category_name" name="category_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="vat_rate">Συντελεστής ΦΠΑ (%)</label>
+                        <input type="number" class="form-control" id="vat_rate" name="vat_rate" value="24" required>
+                    </div>
+
+                    <!-- Νέα δυναμική εισαγωγή υποκατηγοριών -->
+                    <div class="form-group">
+                        <label for="subcategories">Υποκατηγορίες</label>
+                        <div id="subcategories">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="subcategories[]" placeholder="Εισάγετε υποκατηγορία">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary remove-subcategory" type="button">&times;</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-info btn-sm mt-2" id="addSubcategoryButton">Προσθήκη Υποκατηγορίας</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ακύρωση</button>
+                    <button type="submit" class="btn btn-success">Προσθήκη Κατηγορίας</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const addSubcategoryButton = document.getElementById("addSubcategoryButton");
+    const subcategoriesDiv = document.getElementById("subcategories");
+
+    // Προσθήκη νέας γραμμής υποκατηγορίας
+    addSubcategoryButton.addEventListener("click", function () {
+        const subcategoryInputGroup = document.createElement("div");
+        subcategoryInputGroup.className = "input-group mb-2";
+
+        const subcategoryInput = document.createElement("input");
+        subcategoryInput.type = "text";
+        subcategoryInput.className = "form-control";
+        subcategoryInput.name = "subcategories[]";
+        subcategoryInput.placeholder = "Εισάγετε υποκατηγορία";
+
+        const removeButtonDiv = document.createElement("div");
+        removeButtonDiv.className = "input-group-append";
+
+        const removeButton = document.createElement("button");
+        removeButton.className = "btn btn-outline-secondary remove-subcategory";
+        removeButton.type = "button";
+        removeButton.innerHTML = "&times;";
+
+        removeButtonDiv.appendChild(removeButton);
+        subcategoryInputGroup.appendChild(subcategoryInput);
+        subcategoryInputGroup.appendChild(removeButtonDiv);
+
+        subcategoriesDiv.appendChild(subcategoryInputGroup);
+
+        // Προσθήκη event listener για αφαίρεση υποκατηγορίας
+        removeButton.addEventListener("click", function () {
+            subcategoryInputGroup.remove();
+        });
+    });
+
+    // Αφαίρεση υποκατηγορίας
+    document.querySelectorAll(".remove-subcategory").forEach(function (removeButton) {
+        removeButton.addEventListener("click", function () {
+            removeButton.closest(".input-group").remove();
+        });
+    });
+});
+</script>

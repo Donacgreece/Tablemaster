@@ -1,0 +1,31 @@
+{% if request.args.get('tab') == 'backup-restore' %}
+<div class="tab-pane fade {% if request.args.get('tab') == 'backup-restore' %}show active{% endif %}" id="backup-restore">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">Αντίγραφα Ασφαλείας</div>
+        <div class="card-body">
+            <!-- Backup Section -->
+            <div class="form-group">
+                <label class="font-weight-bold">Εξαγωγή Βάσης Δεδομένων</label>
+                <p>Δημιουργήστε ένα αντίγραφο ασφαλείας των βάσεων δεδομένων σας (database.db και audit_logs.db).</p>
+                <form method="POST" action="{{ url_for('export_database') }}">
+                    <button type="submit" class="btn btn-info btn-block">
+                        <i class="fas fa-download mr-2"></i>Δημιουργία Αντιγράφου
+                    </button>
+                </form>
+            </div>
+
+            <!-- Restore Section -->
+            <div class="form-group">
+                <label class="font-weight-bold">Επαναφορά Βάσης Δεδομένων</label>
+                <p>Ανεβάστε ένα αρχείο .zip που περιέχει τα database.db και audit_logs.db. <strong>Προσοχή:</strong> Αυτή η ενέργεια θα αντικαταστήσει τα τρέχοντα δεδομένα!</p>
+                <form method="POST" action="{{ url_for('import_database') }}" enctype="multipart/form-data">
+                    <input type="file" class="form-control" name="backup_file" accept=".zip" required>
+                    <button type="submit" class="btn btn-info btn-block mt-2">
+                        <i class="fas fa-upload mr-2"></i>Επαναφορά Αντιγράφου
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

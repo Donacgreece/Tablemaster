@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Διαχείριση Λογαριασμών - TableMaster{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="my-4 text-center">Διαχείριση Λογαριασμών</h1>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Αριθμός Παραγγελίας</th>
+                    <th>Αριθμός Τραπεζιού</th>
+                    <th>Ημερομηνία Παραγγελίας</th>
+                    <th>Προϊόντα</th>
+                    <th>Κατάσταση</th>
+                    <th>Ενέργειες</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in pending_orders %}
+                <tr>
+                    <td>{{ order.order_id }}</td>
+                    <td>{{ order.table_number if order.table_number else 'N/A' }}</td>
+                    <td>{{ order.order_date }}</td>
+                    <td class="text-truncate" style="max-width: 150px;">{{ order.items }}</td>
+                    <td>{{ order.status | capitalize }}</td>
+                    <td class="text-center">
+                        <a href="{{ url_for('split_bill', order_id=order.order_id) }}" class="btn btn-info btn-sm d-block text-nowrap">
+                            <i class="fas fa-receipt"></i> Διαχείριση
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">Δεν υπάρχουν εκκρεμείς παραγγελίες.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

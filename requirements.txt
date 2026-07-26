@@ -1,0 +1,17 @@
+pandas
+escpos
+cryptography
+Werkzeug
+apscheduler
+Flask
+ftfy
+python-barcode
+python-escpos
+Jinja2  
+viivakoodi
+babel
+flask-babel
+pywebpush
+xlsxwriter
+openpyxl
+python-escpos==3.0

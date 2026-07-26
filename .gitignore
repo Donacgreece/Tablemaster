@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local configuration and secrets
+.env
+encryption.key
+license.key
+
+# Runtime data and customer information
+*.db
+*.db-shm
+*.db-wal
+*.db.bak
+backups/
+uploads/*
+!uploads/template.xlsx
+
+# IDE and operating system
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

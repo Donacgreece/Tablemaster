@@ -1,0 +1,101 @@
+<div class="modal fade" id="paymentMethodModal" tabindex="-1" aria-labelledby="paymentMethodModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="paymentMethodModalLabel">Επιλογή Μεθόδου Πληρωμής</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="paymentMethodForm" method="POST" action="{{ url_for('close_table', table_id=table.id) }}">
+                <div class="modal-body text-center">
+                    <div class="form-group">
+                        <input type="hidden" id="payment_method" name="payment_method">
+                        <button type="button" class="btn btn-outline-primary payment-option" data-method="cash">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <br>
+                            Μετρητά
+                        </button>
+                        <button type="button" class="btn btn-outline-success payment-option" data-method="card">
+                            <i class="fas fa-credit-card"></i>
+                            <br>
+                            Κάρτα
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ακύρωση</button>
+                    <button type="submit" class="btn btn-success" id="submitBtn" disabled>Ολοκλήρωση Πληρωμής</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Στόχευση μόνο του modal με id paymentMethodModal */
+    #paymentMethodModal .modal-dialog-centered {
+        display: flex;
+        align-items: flex-start;
+        margin-top: 30px;
+    }
+
+    #paymentMethodModal .modal-body .btn {
+        width: 100px; /* Ίδιο πλάτος με τα άλλα κουμπιά */
+        height: 80px; /* Ίδιο ύψος */
+        font-size: 0.8rem; /* Μικρότερο μέγεθος γραμματοσειράς */
+        padding: 8px; /* Μειωμένο padding */
+        text-align: center; /* Κεντράρισμα κειμένου */
+    }
+
+    #paymentMethodModal .modal-body .btn i {
+        font-size: 2rem; /* Μέγεθος εικονιδίου */
+        margin-bottom: 2px; /* Μικρό κενό κάτω από το εικονίδιο */
+    }
+    
+    .btn-outline-primary {
+        color: #007bff;
+        border-color: #007bff;
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+    
+    .btn-outline-success {
+        color: #28a745;
+        border-color: #28a745;
+    }
+    
+    .btn-outline-success:hover {
+        background-color: #28a745;
+        color: #fff;
+    }
+    
+    .modal-content {
+        border-radius: 8px; /* Στρογγυλεμένες άκρες */
+        padding: 15px; /* Εσωτερικό padding */
+    }
+    
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const paymentOptions = document.querySelectorAll(".payment-option");
+        const paymentMethodInput = document.getElementById("payment_method");
+        const submitBtn = document.getElementById("submitBtn");
+    
+        paymentOptions.forEach(option => {
+            option.addEventListener("click", function() {
+                paymentOptions.forEach(btn => btn.classList.remove("active"));
+                this.classList.add("active");
+                paymentMethodInput.value = this.getAttribute("data-method");
+                submitBtn.disabled = false;  // Ενεργοποιούμε το κουμπί υποβολής όταν επιλεγεί μέθοδος πληρωμής
+            });
+        });
+
+        // Απενεργοποίηση κουμπιού αν δεν έχει επιλεχθεί μέθοδος πληρωμής
+        submitBtn.disabled = true;
+    });
+</script>

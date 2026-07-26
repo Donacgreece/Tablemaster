@@ -1,0 +1,39 @@
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="addUserModalLabel">Προσθήκη Χρήστη</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="addUserForm" method="POST" action="{{ url_for('add_user') }}?tab=user-management">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="first_name">Όνομα:</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Επώνυμο:</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pin">PIN:</label>
+                        <input type="text" class="form-control" id="pin" name="pin" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Ρόλος:</label>
+                        <select class="form-control" id="role" name="role">
+                            <option value="user">Σερβιτόρος</option>
+                            <option value="admin">Διαχειριστής</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ακύρωση</button>
+                    <button type="submit" class="btn btn-success">Προσθήκη Χρήστη</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

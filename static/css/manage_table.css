@@ -1,0 +1,61 @@
+@media (max-width: 768px) {
+    h1, h4 {
+        font-size: 1.5rem;
+    }
+    .modal-dialog {
+        max-width: 95%;
+    }
+    .btn {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    h1 {
+        font-size: 1.25rem;
+    }
+    .btn {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.75rem;
+    }
+    .list-group-item {
+        font-size: 0.9rem;
+    }
+}
+
+.list-group-item {
+    font-size: 1rem;
+}
+
+.modal-header.bg-danger {
+    background-color: #dc3545;
+}
+
+.modal-header .close span {
+    color: white;
+}
+
+.order-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Χώρος μεταξύ της τιμής και του κάδου */
+}
+
+.list-group-item .order-actions span {
+    margin-right: 10px; /* Απόσταση δεξιά για ευθυγράμμιση της τιμής */
+}
+
+.list-group-item .btn-link i {
+    font-size: 1.2em;
+}
+
+.list-group-item .btn-link {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+}
+
+.list-group-item .btn-link:hover {
+    color: red;
+}

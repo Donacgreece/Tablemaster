@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Διαχείριση Τραπεζιού - TableMaster{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4 text-center">Διαχείριση Τραπεζιού {{ table.table_number }}</h1>
+
+    <div class="mb-4 text-center">
+        <h4>Κατάσταση: 
+            {% if table.status == 'free' %}
+                <span class="badge badge-success">Ελεύθερο</span>
+            {% elif table.status == 'reserved' %}
+                <span class="badge badge-warning">Κρατημένο</span>
+            {% elif table.status == 'occupied' %}
+                <span class="badge badge-danger">Κατειλημμένο</span>
+            {% endif %}
+        </h4>
+
+        <div class="d-block d-md-flex justify-content-center align-items-center flex-wrap">
+            <form method="POST" action="{{ url_for('change_table_status', table_id=table.id) }}" class="mb-2 mb-md-0">
+                <div class="d-inline-block">
+                    <select name="status" class="form-control d-inline w-auto mb-2 mb-md-0 select-status">
+                        <option value="free" {% if table.status == 'free' %}selected{% endif %}>Ελεύθερο</option>
+                        <option value="reserved" {% if table.status == 'reserved' %}selected{% endif %}>Κρατημένο</option>
+                        <option value="occupied" {% if table.status == 'occupied' %}selected{% endif %}>Κατειλημμένο</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Αλλαγή Κατάστασης</button>
+                </div>
+            </form>
+        
+            {% if session['user_role'] == 'admin' %}
+                <button class="btn btn-info ml-0 ml-md-2" data-toggle="modal" data-target="#editTableModal">
+                    <i class="fas fa-edit"></i>
+                </button>
+        
+                <button type="button" class="btn btn-danger ml-0 ml-md-2" data-toggle="modal" data-target="#confirmDeleteModal">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            {% endif %}
+        </div>        
+    </div>
+
+    <div class="mb-4">
+        <h4>Παραγγελίες:</h4>
+        <ul class="list-group mb-3">
+            {% for order in orders %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ order.product_name }}</strong> - {{ order.quantity }} x {{ order.price }}€
+                    {% if order.comments %}
+                    <small class="text-muted d-block">Σχόλια: {{ order.comments }}</small>
+                    {% endif %}
+                    {% if order.subcategories %}
+                    <small class="text-muted d-block">Υποκατηγορίες: {{ order.subcategories }}</small>
+                    {% endif %}
+                </div>
+                <div class="order-actions">
+                    <span>{{ order.total }}€</span>
+                    {% if session['user_role'] == 'admin' %}
+                    <form method="POST" action="{{ url_for('delete_order_item', item_id=order.id) }}" class="ml-3">
+                        <button type="submit" class="btn btn-link p-0 text-danger">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>                
+            </li>
+            {% else %}
+            <li class="list-group-item text-muted">Δεν υπάρχουν παραγγελίες για αυτό το τραπέζι.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="summary-section mb-4 p-3 bg-light rounded border">
+        <div class="d-flex justify-content-between font-weight-bold">
+            <span>Σύνολο:</span>
+            <span>{{ total_amount }}€</span>
+        </div>
+    </div>
+    
+    <div class="mb-4 text-center action-buttons">
+        <button class="btn btn-success" data-toggle="modal" data-target="#addOrderModal">
+            <i class="fas fa-plus"></i> Προσθήκη Παραγγελίας
+        </button>
+        
+        <button class="btn btn-danger ml-2" data-toggle="modal" data-target="#paymentMethodModal" 
+                {% if total_amount == 0 %} disabled title="Δεν υπάρχουν προϊόντα για κλείσιμο του τραπεζιού" {% endif %}>
+            <i class="fas fa-times"></i> Κλείσιμο Τραπεζιού
+        </button>
+
+        <button class="btn btn-warning ml-2 transfer-btn" data-toggle="modal" data-target="#transferOrdersModal" 
+                {% if total_amount == 0 %} disabled title="Δεν υπάρχουν προϊόντα για μεταφορά παραγγελιών" {% endif %}>
+            <i class="fas fa-exchange-alt"></i> 
+        </button>
+    </div>
+</div>
+
+{% include 'modals/edit_table_modal.html' %}
+{% include 'modals/add_order_modal.html' %}
+{% include 'modals/close_table.html' %}
+{% include 'modals/confirm_delete_table_modal.html' %}
+{% include 'modals/transfer_orders_modal.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/manage_table.css') }}">
+<style>
+    @media (max-width: 576px) {
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .action-buttons .btn {
+            width: 100%;
+            max-width: 300px;
+            margin-left: 0 !important; /* Override Bootstrap margin */
+        }
+        .action-buttons .transfer-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.375rem 0.75rem; /* Match padding of other buttons */
+            font-size: 1rem; /* Match font size of other buttons */
+        }
+        .action-buttons .transfer-btn i {
+            margin-right: 0.5rem; /* Add space between icon and text */
+        }
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/manage_table.js') }}"></script>
+<script src="{{ url_for('static', filename='js/close_table.js') }}"></script>
+{% endblock %}
+{% endblock %}

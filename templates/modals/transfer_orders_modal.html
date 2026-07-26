@@ -1,0 +1,30 @@
+<div class="modal fade" id="transferOrdersModal" tabindex="-1" role="dialog" aria-labelledby="transferOrdersModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="transferOrdersForm" method="POST" action="{{ url_for('transfer_orders') }}">
+                <input type="hidden" name="source_table_id" value="{{ table.id }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="transferOrdersModalLabel">Μεταφορά Παραγγελιών</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="target_table_id">Επιλέξτε Τραπέζι Προορισμού:</label>
+                        <select name="target_table_id" id="target_table_id" class="form-control">
+                            {% for t in all_tables %}
+                            <option value="{{ t.id }}">{{ t.table_number }} ({{ t.status }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <p>Όλες οι παραγγελίες θα μεταφερθούν στο νέο τραπέζι.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Άκυρο</button>
+                    <button type="submit" class="btn btn-primary">Μεταφορά</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

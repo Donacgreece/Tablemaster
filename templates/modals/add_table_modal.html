@@ -1,0 +1,32 @@
+<div class="modal fade" id="addTableModal" tabindex="-1" aria-labelledby="addTableModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addTableModalLabel">Προσθήκη Τραπεζιού</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="{{ url_for('add_table') }}">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="table_number">Αριθμός Τραπεζιού</label>
+                        <input type="text" class="form-control" id="table_number" name="table_number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="capacity">Χωρητικότητα</label>
+                        <input type="number" class="form-control" id="capacity" name="capacity" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="space">Χώρος</label>
+                        <input type="text" class="form-control" id="space" name="space" placeholder="Π.χ. 1ος Όροφος, Σάλα, κλπ." required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ακύρωση</button>
+                    <button type="submit" class="btn btn-primary">Προσθήκη Τραπεζιού</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

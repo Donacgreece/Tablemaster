@@ -1,0 +1,36 @@
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="addProductModalLabel">Προσθήκη Προϊόντος</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="{{ url_for('add_product') }}?tab=product-management">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="product_name">Όνομα Προϊόντος</label>
+                        <input type="text" class="form-control" id="product_name" name="product_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product_price">Τιμή</label>
+                        <input type="number" step="0.01" class="form-control" id="product_price" name="product_price" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category_id">Κατηγορία</label>
+                        <select class="form-control" id="category_id" name="category_id" required>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ακύρωση</button>
+                    <button type="submit" class="btn btn-success">Προσθήκη Προϊόντος</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

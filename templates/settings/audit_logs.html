@@ -1,0 +1,59 @@
+<div class="tab-pane fade {% if request.args.get('tab') == 'audit-logs' %}show active{% endif %}" id="audit-logs">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">Έλεγχος Διαγραφών</div>
+        <div class="card-body">
+            <!-- Φόρμα Αναζήτησης -->
+            <form method="GET" action="{{ url_for('settings') }}">
+                <input type="hidden" name="tab" value="audit-logs">
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label for="date_from" class="font-weight-bold">Από Ημερομηνία</label>
+                        <input type="date" class="form-control" id="date_from" name="date_from" value="{{ request.args.get('date_from', '') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="date_to" class="font-weight-bold">Έως Ημερομηνία</label>
+                        <input type="date" class="form-control" id="date_to" name="date_to" value="{{ request.args.get('date_to', '') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="user_id" class="font-weight-bold">Χρήστης</label>
+                        <select class="form-control" id="user_id" name="user_id">
+                            <option value="">Όλοι οι Χρήστες</option>
+                            {% for user in users %}
+                                <option value="{{ user.id }}" {% if request.args.get('user_id') == user.id|string %}selected{% endif %}>
+                                    {{ user.first_name }} {{ user.last_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3 align-self-end">
+                        <button type="submit" class="btn btn-info btn-block">Αναζήτηση</button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Πίνακας Logs -->
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID Αντικειμένου</th>
+                        <th>Προϊόν</th>
+                        <th>Τραπέζι</th>
+                        <th>Χρήστης</th>
+                        <th>Ημερομηνία/Ώρα</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in audit_logs %}
+                        <tr>
+                            <td>{{ log.order_item_id }}</td>
+                            <td>{{ log.product_name }}</td>
+                            <td>{{ log.table_number }}</td>
+                            <td>{{ log.user_name }}</td>
+                            <td>{{ log.deletion_time }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

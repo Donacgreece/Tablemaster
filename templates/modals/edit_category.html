@@ -1,0 +1,99 @@
+<div class="modal fade" id="editCategoryModal{{ category.id }}" tabindex="-1" aria-labelledby="editCategoryModalLabel{{ category.id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="editCategoryModalLabel{{ category.id }}">Επεξεργασία Κατηγορίας</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="{{ url_for('edit_category', category_id=category.id) }}?tab=product-management">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="category_name{{ category.id }}">Όνομα Κατηγορίας</label>
+                        <input type="text" class="form-control" id="category_name{{ category.id }}" name="category_name" value="{{ category.name }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="vat_rate{{ category.id }}">Συντελεστής ΦΠΑ (%)</label>
+                        <input type="number" class="form-control" id="vat_rate{{ category.id }}" name="vat_rate" value="{{ category.vat_rate }}" required>
+                    </div>
+
+                    <!-- Δυναμική εισαγωγή υποκατηγοριών -->
+                    <div class="form-group">
+                        <label for="subcategories">Υποκατηγορίες</label>
+                        <div id="subcategories{{ category.id }}">
+                            <!-- Εμφάνιση υπαρχουσών υποκατηγοριών -->
+                            {% for subcategory in category.subcategories %}
+                            <div class="input-group mb-2 subcategory-group">
+                                <input type="text" class="form-control" name="subcategories[{{ subcategory.id }}]" value="{{ subcategory.name }}" placeholder="Εισάγετε υποκατηγορία">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary remove-subcategory" type="button" data-subcategory-id="{{ subcategory.id }}">&times;</button>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <button type="button" class="btn btn-info btn-sm mt-2" id="addSubcategoryButton{{ category.id }}">Προσθήκη Υποκατηγορίας</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ακύρωση</button>
+                    <button type="submit" class="btn btn-success">Αποθήκευση Αλλαγών</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const addSubcategoryButton = document.getElementById("addSubcategoryButton{{ category.id }}");
+    const subcategoriesDiv = document.getElementById("subcategories{{ category.id }}");
+
+    // Προσθήκη νέας γραμμής υποκατηγορίας
+    addSubcategoryButton.addEventListener("click", function () {
+        const subcategoryInputGroup = document.createElement("div");
+        subcategoryInputGroup.className = "input-group mb-2 subcategory-group";
+
+        const subcategoryInput = document.createElement("input");
+        subcategoryInput.type = "text";
+        subcategoryInput.className = "form-control";
+        subcategoryInput.name = "new_subcategories[]";  // Όνομα πίνακα για νέες υποκατηγορίες
+        subcategoryInput.placeholder = "Εισάγετε υποκατηγορία";
+
+        const removeButtonDiv = document.createElement("div");
+        removeButtonDiv.className = "input-group-append";
+
+        const removeButton = document.createElement("button");
+        removeButton.className = "btn btn-outline-secondary remove-subcategory";
+        removeButton.type = "button";
+        removeButton.innerHTML = "&times;";
+
+        removeButtonDiv.appendChild(removeButton);
+        subcategoryInputGroup.appendChild(subcategoryInput);
+        subcategoryInputGroup.appendChild(removeButtonDiv);
+
+        subcategoriesDiv.appendChild(subcategoryInputGroup);
+
+        // Προσθήκη event listener για αφαίρεση υποκατηγορίας
+        removeButton.addEventListener("click", function () {
+            subcategoryInputGroup.remove();
+        });
+    });
+
+    // Αφαίρεση υπάρχουσας υποκατηγορίας
+    document.querySelectorAll("#subcategories{{ category.id }} .remove-subcategory").forEach(function (removeButton) {
+        removeButton.addEventListener("click", function () {
+            const subcategoryId = removeButton.getAttribute("data-subcategory-id");
+            if (subcategoryId) {
+                // Αντιμετώπιση αφαίρεσης με απόκρυψη αντί για διαγραφή από το DOM
+                const hiddenInput = document.createElement("input");
+                hiddenInput.type = "hidden";
+                hiddenInput.name = "remove_subcategories[]";
+                hiddenInput.value = subcategoryId;
+                subcategoriesDiv.appendChild(hiddenInput);
+            }
+            removeButton.closest(".input-group").remove();
+        });
+    });
+});
+</script>

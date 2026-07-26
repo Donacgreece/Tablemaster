@@ -1,0 +1,25 @@
+<div class="modal fade" id="uploadExcelModal" tabindex="-1" aria-labelledby="uploadExcelModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="uploadExcelModalLabel">Ανέβασμα Αρχείου Excel</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="{{ url_for('upload_excel') }}" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="excelFile">Επιλογή Αρχείου Excel</label>
+                        <input type="file" class="form-control" id="excelFile" name="excelFile" accept=".xlsx, .xls" required>
+                    </div>
+                    <p class="text-muted">Το αρχείο πρέπει να έχει ένα tab ανά κατηγορία, με το όνομα της κατηγορίας και το ποσοστό ΦΠΑ σε παρένθεση (π.χ. Καφές (13%)).</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ακύρωση</button>
+                    <button type="submit" class="btn btn-success">Ανέβασμα</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

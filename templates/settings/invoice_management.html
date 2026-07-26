@@ -1,0 +1,91 @@
+<div class="tab-pane fade {% if request.args.get('tab') == 'invoice-management' %}show active{% endif %}" id="invoice-management">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">Διαχείριση Παραστατικών</div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('update_invoice_settings') }}">
+                <div class="form-group">
+                    <label for="invoice_printer" class="font-weight-bold">Επιλογή Εκτυπωτή για Εκτύπωση Παραστατικών</label>
+                    <select class="form-control" id="invoice_printer" name="invoice_printer" required>
+                        <option value="none" {% if invoice_printer_id == 'none' %}selected{% endif %}>Κανένας Εκτυπωτής</option>
+                        {% for printer in printers %}
+                            <option value="{{ printer.id }}" {% if printer.id == invoice_printer_id|int %}selected{% endif %}>
+                                {{ printer.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group d-flex align-items-center justify-content-between">
+                    <label class="font-weight-bold" for="print_receipt_toggle">
+                        Εκτύπωση Δελτίο Παραγγελίας κατά το Κλείσιμο Τραπεζιού
+                    </label>
+                    <label class="switch">
+                        <input type="checkbox" id="print_receipt_toggle" name="print_receipt_on_close" value="yes" 
+                               {% if print_receipt_on_close == 'yes' %}checked{% endif %}>
+                        <span class="slider round"></span>
+                    </label>
+                    <input type="hidden" name="print_receipt_on_close" value="no"> <!-- Προσθήκη για αποστολή "no" αν δεν είναι επιλεγμένο -->
+                </div>
+
+                <button type="submit" class="btn btn-info btn-block">Αποθήκευση</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 26px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #007bff; /* Μπλε χρώμα */
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+</style>
+
+<script>
+    setTimeout(() => {
+        const flashMessage = document.getElementById('flash-message');
+        if (flashMessage) {
+            flashMessage.classList.remove('show');
+            flashMessage.classList.add('fade');
+        }
+    }, 5000); // Το μήνυμα κλείνει αυτόματα μετά από 5 δευτερόλεπτα
+</script>

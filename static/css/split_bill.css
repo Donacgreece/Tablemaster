@@ -1,0 +1,121 @@
+.table-responsive {
+    border-radius: 8px;
+    margin-bottom: 0; /* Αφαίρεση του κάτω περιθωρίου */
+}
+
+thead.thead-dark th {
+    background-color: #343a40;
+    color: white;
+    border-bottom: 2px solid #343a40;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+td, th {
+    vertical-align: middle;
+    text-align: center;
+}
+
+td:first-child {
+    text-align: center;
+}
+
+.item-checkbox {
+    position: relative;
+}
+
+.item-total,
+#selectedTotal,
+#changeDue {
+    font-weight: bold;
+}
+
+#selectedTotal {
+    font-size: 1.25rem;
+    color: green;
+}
+
+#changeDue {
+    font-size: 1.25rem;
+    color: red;
+}
+
+#amountGiven {
+    width: 150px;
+    text-align: right;
+    font-size: 1rem;
+    margin-top: 5px;
+}
+
+label {
+    display: block;
+    text-align: right;
+}
+
+.d-flex.flex-column.align-items-end {
+    width: 100%;
+}
+
+.modal-dialog-centered {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 30px;
+}
+
+/* Modal buttons */
+.modal-body .btn {
+    width: 100px; /* Μικρότερο πλάτος */
+    height: 80px; /* Μικρότερο ύψος */
+    font-size: 0.8rem; /* Μικρότερο μέγεθος γραμματοσειράς */
+    padding: 8px; /* Μειωμένο padding */
+}
+
+.modal-body .btn i {
+    font-size: 2rem; /* Μικρότερο μέγεθος για το εικονίδιο */
+    margin-bottom: 2px; /* Ελαφρώς μικρότερο κενό κάτω από το εικονίδιο */
+}
+
+
+/* Button styles */
+.btn-outline-primary {
+    color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-outline-primary:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-outline-success {
+    color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-outline-success:hover {
+    background-color: #28a745;
+    color: #fff;
+}
+
+/* Αύξηση μεγέθους των checkbox */
+.item-checkbox {
+    width: 24px; /* Αύξηση πλάτους */
+    height: 24px; /* Αύξηση ύψους */
+    transform: scale(1.2); /* Μεγέθυνση */
+    margin: 0; /* Αφαίρεση περιθωρίων */
+    position: relative; /* Για σωστή τοποθέτηση */
+}
+
+/* Προσαρμογή του dropdown για την ποσότητα */
+.quantity-select {
+    width: 70px; /* Αυξημένο πλάτος */
+    height: 40px; /* Αυξημένο ύψος */
+    font-size: 1rem; /* Μεγαλύτερο μέγεθος γραμματοσειράς */
+    padding: 5px; /* Επαρκές εσωτερικό κενό */
+    text-align: center; /* Κεντραρισμένο περιεχόμενο */
+    border-radius: 5px; /* Στρογγυλεμένες άκρες */
+    border: 1px solid #ced4da; /* Διακριτικό περίγραμμα */
+    background-color: #f8f9fa; /* Ανοιχτόχρωμο φόντο */
+}

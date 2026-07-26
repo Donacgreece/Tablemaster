@@ -1,0 +1,54 @@
+<div class="modal fade" id="editUserModal{{ user.id }}" tabindex="-1" aria-labelledby="editUserModalLabel{{ user.id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserModalLabel{{ user.id }}">Επεξεργασία Χρήστη</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editUserForm{{ user.id }}" method="POST" action="{{ url_for('edit_user', user_id=user.id) }}">
+                <div class="modal-body">
+                    <input type="hidden" id="edit_user_id{{ user.id }}" name="user_id" value="{{ user.id }}">
+                    
+                    {% if user.id == 1 %}
+                        <!-- Μόνο το PIN μπορεί να αλλάξει για τον βασικό admin -->
+                        <input type="hidden" id="first_name{{ user.id }}" name="first_name" value="{{ user.first_name }}">
+                        <input type="hidden" id="last_name{{ user.id }}" name="last_name" value="{{ user.last_name }}">
+                        <input type="hidden" id="role{{ user.id }}" name="role" value="{{ user.role }}">
+                        
+                        <div class="form-group">
+                            <label for="pin{{ user.id }}">PIN:</label>
+                            <input type="text" class="form-control" id="pin{{ user.id }}" name="pin" value="{{ user.pin }}" required>
+                        </div>
+                    {% else %}
+                        <!-- Όλα τα πεδία μπορούν να αλλάξουν για άλλους χρήστες -->
+                        <div class="form-group">
+                            <label for="first_name{{ user.id }}">Όνομα:</label>
+                            <input type="text" class="form-control" id="first_name{{ user.id }}" name="first_name" value="{{ user.first_name }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name{{ user.id }}">Επώνυμο:</label>
+                            <input type="text" class="form-control" id="last_name{{ user.id }}" name="last_name" value="{{ user.last_name }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pin{{ user.id }}">PIN:</label>
+                            <input type="text" class="form-control" id="pin{{ user.id }}" name="pin" value="{{ user.pin }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="role{{ user.id }}">Ρόλος:</label>
+                            <select class="form-control" id="role{{ user.id }}" name="role">
+                                <option value="user" {% if user.role == 'user' %}selected{% endif %}>Σερβιτόρος</option>
+                                <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Διαχειριστής</option>
+                            </select>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ακύρωση</button>
+                    <button type="submit" class="btn btn-success">Αποθήκευση Αλλαγών</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

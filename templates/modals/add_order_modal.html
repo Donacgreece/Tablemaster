@@ -1,0 +1,332 @@
+<div class="modal fade" id="addOrderModal" tabindex="-1" aria-labelledby="addOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addOrderModalLabel">Προσθήκη Παραγγελίας</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form id="orderForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="category_id">Κατηγορία</label>
+                                <select class="form-control" id="category_id" required>
+                                    <option value="">Επιλέξτε Κατηγορία</option>
+                                    {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="product_id">Προϊόν</label>
+                                <select class="form-control" id="product_id" name="product_id" required>
+                                    <option value="">Επιλέξτε Προϊόν</option>
+                                    {% for category in categories %}
+                                    {% for product in category.products %}
+                                    <option value="{{ product.id }}" data-category="{{ category.id }}">{{ product.name }} ({{ product.price }}€)</option>
+                                    {% endfor %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Βελτιωμένη διάταξη υποκατηγοριών με checkboxes -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="subcategory_id">Υποκατηγορίες</label>
+                                <div id="subcategory_list">
+                                    <p>Επιλέξτε υποκατηγορίες...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="quantity">Ποσότητα</label>
+                                <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="1" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="comments">Σχόλια (προαιρετικό)</label>
+                                <input type="text" class="form-control" id="comments" name="comments" placeholder="Π.χ. ελαφρύς, χωρίς ζάχαρη">
+                            </div>
+                        </div>
+                    </div>
+
+                    <h6>Προϊόντα που προστέθηκαν:</h6>
+                    <ul id="productList" class="list-group mb-3"></ul>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ακύρωση</button>
+                    <div class="footer-buttons">
+                        <button type="button" id="addAnotherButton" class="btn btn-info">Προσθήκη Επόμενου</button>
+                        <button type="button" id="completeOrderButton" class="btn btn-primary">Ολοκλήρωση Παραγγελίας</button>
+                    </div>
+                </div>
+                <input type="hidden" id="complete_order" name="complete_order" value="false">
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const categorySelect = document.getElementById("category_id");
+        const productSelect = document.getElementById("product_id");
+        const subcategoryList = document.getElementById("subcategory_list");
+        const productList = document.getElementById("productList");
+        const addAnotherButton = document.getElementById("addAnotherButton");
+        const completeOrderButton = document.getElementById("completeOrderButton");
+        const orderForm = document.getElementById("orderForm");
+    
+        // Ενημέρωση της λίστας προϊόντων με βάση την κατηγορία
+        categorySelect.addEventListener("change", function () {
+            const categoryId = this.value;
+            productSelect.innerHTML = '<option value="">Επιλέξτε Προϊόν</option>';
+            subcategoryList.innerHTML = '<p>Επιλέξτε υποκατηγορίες...</p>';
+    
+            if (categoryId) {
+                const options = [...productSelect.options].filter(option => option.dataset.category === categoryId);
+                options.forEach(option => productSelect.appendChild(option));
+            }
+        });
+    
+        // Αλλαγή προϊόντος και ενημέρωση υποκατηγοριών
+        productSelect.addEventListener("change", function () {
+            const productId = this.value;
+            subcategoryList.innerHTML = ''; // Καθαρίζουμε το πεδίο με τις υποκατηγορίες
+    
+            if (productId) {
+                fetch(`/get_subcategories/${productId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.subcategories.length) {
+                            data.subcategories.forEach(subcategory => {
+                                const div = document.createElement("div");
+                                div.classList.add("subcategory-item");
+    
+                                const checkbox = document.createElement("input");
+                                checkbox.type = "checkbox";
+                                checkbox.id = `subcategory_${subcategory.id}`;
+                                checkbox.name = "subcategories[]";
+                                checkbox.value = subcategory.id;
+    
+                                const label = document.createElement("label");
+                                label.htmlFor = `subcategory_${subcategory.id}`;
+                                label.textContent = subcategory.name;
+    
+                                div.appendChild(checkbox);
+                                div.appendChild(label);
+    
+                                subcategoryList.appendChild(div);
+                            });
+                        } else {
+                            subcategoryList.innerHTML = '<p>Δεν υπάρχουν διαθέσιμες υποκατηγορίες.</p>';
+                        }
+                    })
+                    .catch(error => console.error('Error fetching subcategories:', error));
+            }
+        });
+    
+        // Συνάρτηση για προσθήκη προϊόντος στη λίστα
+        function addProductToList() {
+            const categorySelect = document.getElementById("category_id");
+            const productSelect = document.getElementById("product_id");
+            const quantityInput = document.getElementById("quantity");
+            const commentsInput = document.getElementById("comments");
+        
+            const selectedCategory = categorySelect.options[categorySelect.selectedIndex].text;
+            const selectedProduct = productSelect.options[productSelect.selectedIndex].text;
+            const quantity = parseInt(quantityInput.value, 10);
+            const comments = commentsInput.value;
+        
+            const selectedSubcategories = [...document.querySelectorAll("#subcategory_list input[type='checkbox']:checked")]
+                .map(cb => cb.nextSibling.textContent); // Παίρνουμε τα ονόματα των επιλεγμένων υποκατηγοριών
+        
+            if (!productSelect.value || !quantity || quantity <= 0) {
+                return false;
+            }
+        
+            // Έλεγχος αν το προϊόν με την ίδια υποκατηγορία υπάρχει ήδη στη λίστα
+            let existingItem = null;
+            [...productList.children].forEach(item => {
+                const hiddenInput = item.querySelector("input[type='hidden']").value;
+                const [productId, , commentsValue, subcategories] = hiddenInput.split("|");
+        
+                if (
+                    productId === productSelect.value &&
+                    subcategories === selectedSubcategories.join(",") &&
+                    commentsValue === comments
+                ) {
+                    existingItem = item;
+                }
+            });
+        
+            if (existingItem) {
+                // Αύξηση ποσότητας αν το προϊόν υπάρχει ήδη
+                const currentQuantity = parseInt(existingItem.querySelector(".quantity").textContent, 10);
+                const newQuantity = currentQuantity + quantity;
+                existingItem.querySelector(".quantity").textContent = newQuantity;
+        
+                const hiddenInput = existingItem.querySelector("input[type='hidden']");
+                const values = hiddenInput.value.split("|");
+                values[1] = newQuantity;
+                hiddenInput.value = values.join("|");
+            } else {
+                // Δημιουργία νέου στοιχείου αν δεν υπάρχει
+                const listItem = document.createElement("li");
+                listItem.className = "list-group-item d-flex justify-content-between align-items-center";
+        
+                listItem.innerHTML = `
+                    <div class="d-flex flex-column flex-md-row">
+                        <span><strong>Κατηγορία:</strong> ${selectedCategory}</span>
+                        <span class="ml-md-3"><strong>Προϊόν:</strong> ${selectedProduct} ${selectedSubcategories.length ? '- ' + selectedSubcategories.join(', ') : ''} (Ποσότητα: <span class="quantity">${quantity}</span>) ${comments ? "- Σχόλια: " + comments : ""}</span>
+                    </div>
+                    <button type="button" class="btn btn-link p-0 removeProduct">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                    <input type="hidden" name="products[]" value="${productSelect.value}|${quantity}|${comments}|${selectedSubcategories.join(',')}">
+                `;
+        
+                productList.appendChild(listItem);
+        
+                listItem.querySelector(".removeProduct").addEventListener("click", function () {
+                    listItem.remove();
+                });
+            }
+        
+            // Reset των πεδίων μετά την προσθήκη
+            categorySelect.value = "";
+            productSelect.innerHTML = '<option value="">Επιλέξτε Προϊόν</option>';
+            subcategoryList.innerHTML = '<p>Επιλέξτε υποκατηγορίες...</p>';
+            quantityInput.value = "1";
+            commentsInput.value = "";
+        
+            return true;
+        }    
+        
+        addAnotherButton.addEventListener("click", function () {
+            if (addProductToList()) {
+                // Εμφάνιση επιτυχίας και reset των πεδίων για το επόμενο προϊόν
+            }
+        });
+    
+        completeOrderButton.addEventListener("click", function () {
+            if (addProductToList() || productList.children.length > 0) {
+                const formData = new FormData(orderForm);
+                formData.set('complete_order', 'true');
+    
+                fetch('{{ url_for("add_order", table_id=table.id) }}', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Σφάλμα κατά την ολοκλήρωση της παραγγελίας: ' + data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+    });
+</script>
+
+<style>
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.subcategory-item {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.subcategory-item input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.subcategory-item label {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.btn-link {
+    color: #dc3545;
+    text-decoration: none;
+}
+
+.btn-link .fas {
+    font-size: 20px;
+}
+
+/* Βασική διάταξη για tablets και PCs */
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.footer-buttons {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+}
+
+/* Προσαρμογές μόνο για κινητά (max-width: 576px) */
+@media (max-width: 576px) {
+    .modal-footer {
+        justify-content: space-between;
+        align-items: stretch;
+        flex-wrap: nowrap;
+    }
+
+    .modal-footer .btn-secondary {
+        flex: 0 0 40%;
+        height: 76px; /* Ύψος ίσο με τα δύο δεξιά κουμπιά + το gap */
+        padding: 6px 10px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .footer-buttons {
+        flex-direction: column;
+        flex: 0 0 55%;
+        gap: 6px;
+        align-items: flex-end;
+    }
+
+    .footer-buttons .btn {
+        width: 100%;
+        padding: 6px 10px;
+        font-size: 14px;
+        text-align: center;
+        height: 35px; /* Ίσο ύψος για κάθε κουμπί */
+    }
+}
+</style>
