@@ -119,18 +119,6 @@
     </div>
 </div>
 
-<script>
-    function resetFilters() {
-        // Επαναφορά τιμών στα προεπιλεγμένα
-        document.getElementById('status').selectedIndex = 0;
-        document.getElementById('user_id').selectedIndex = 0;
-        document.getElementById('table_id').value = '';
-        document.getElementById('date_from').value = '';
-        document.getElementById('date_to').value = '';
-        
-        // Αυτόματη υποβολή της φόρμας με τα αρχικά φίλτρα
-        document.getElementById('ordersForm').submit();
-    }
-</script>
+<script src="{{ url_for('static', filename='js/pages/orders.js') }}"></script>
 
 {% endblock %}

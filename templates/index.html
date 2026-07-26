@@ -13,25 +13,6 @@
     </div>
 </div>
 
-<script>
-function dismissWarning() {
-    fetch('/dismiss_warning', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log('Warning dismissed successfully');
-            // Κλείσε το alert
-            document.querySelector('.persistent-warning').remove();
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
-</script>
 {% endif %}
 
 <div class="hero-section text-center text-white py-5">
@@ -118,28 +99,8 @@ function dismissWarning() {
     </div>
 </div>
 
-<style>
-    .persistent-warning {
-        border: 2px solid #ffca2c;
-        background-color: #fff3cd;
-        color: #664d03;
-        font-size: 1.1rem;
-        padding: 1rem;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    .persistent-warning .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-        font-size: 1rem;
-        padding: 0.5rem 1rem;
-    }
-    .persistent-warning .btn-primary:hover {
-        background-color: #0056b3;
-        border-color: #0056b3;
-    }
-</style>
-
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 {% endblock %}
+<script src="{{ url_for('static', filename='js/pages/dashboard.js') }}"></script>
 {% endblock %}

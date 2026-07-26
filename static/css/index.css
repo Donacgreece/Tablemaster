@@ -88,3 +88,23 @@
     }
 }
 
+.persistent-warning {
+    padding: 1rem;
+    border: 2px solid #ffca2c;
+    color: #664d03;
+    background-color: #fff3cd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 1.1rem;
+}
+
+.persistent-warning .btn-primary {
+    padding: 0.5rem 1rem;
+    border-color: #007bff;
+    background-color: #007bff;
+    font-size: 1rem;
+}
+
+.persistent-warning .btn-primary:hover {
+    border-color: #0056b3;
+    background-color: #0056b3;
+}
